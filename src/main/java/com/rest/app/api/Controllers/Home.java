@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.rest.app.api.Repo.WorkerRepo;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class Home {
@@ -16,8 +17,8 @@ public class Home {
     private WorkerRepo workerRepo;
 
     @GetMapping(value = "/")
-    public String gatHome() {
-      return "Olá novamente!";
+    public String getHome() {
+      return "Wellcome to RESTful API!";
     };
 
     @GetMapping(value = "/api/workers")
@@ -25,27 +26,29 @@ public class Home {
         return workerRepo.findAll();
     };
 
+    @GetMapping(value = "/api/workers/{id}")
+    public Optional<Workers> getSingle(@PathVariable long id) {
+        return workerRepo.findById(id);
+    };
+
     @PostMapping(value = "/api/workers/create")
-    public String saveWorker(@RequestBody Workers workers) {
-        workerRepo.save(workers);
-        return "status: ok";
+    public void saveWorker(@RequestBody Workers newWorker) {
+        workerRepo.save(newWorker);
     };
 
     @PutMapping(value = "/api/update/{id}")
-    public String update(@PathVariable long id, @RequestBody Workers workers) {
+    public void update(@PathVariable long id, @RequestBody Workers worker) {
         Workers updateWorker = workerRepo.findById(id).get();
-        updateWorker.setNome(workers.getNome());
-        updateWorker.setSobrenome(workers.getSobrenome());
-        updateWorker.setIdade(workers.getIdade());
-        updateWorker.setCargo(workers.getCargo());
+        updateWorker.setNome(worker.getNome());
+        updateWorker.setSobrenome(worker.getSobrenome());
+        updateWorker.setIdade(worker.getIdade());
+        updateWorker.setCargo(worker.getCargo());
         workerRepo.save(updateWorker);
-        return "updated";
     };
 
     @DeleteMapping(value = "/api/delete/{id}")
-    public String delete(@PathVariable long id, @RequestBody Workers workers) {
+    public void delete(@PathVariable long id) {
         workerRepo.deleteById(id);
-        return "sucesfully deleted";
     };
 
 }

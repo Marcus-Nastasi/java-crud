@@ -2,7 +2,8 @@ package com.rest.app.api.Models;
 
 import jakarta.persistence.*;
 
-@Entity
+@Table(name = "workers")
+@Entity(name = "workers")
 public class Workers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
